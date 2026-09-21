@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nutrition Blog | Dr. Stephen Karimi</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #f7f9f4;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* ===== HEADER ===== */
+    .header {
+      position: sticky; top: 0; z-index: 1000;
+      background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 50%, #388e3c 100%);
+      box-shadow: 0 4px 20px rgba(27, 94, 32, 0.25);
+      padding: 14px 0;
+    }
+    .header-container {
+      max-width: 1200px; margin: 0 auto; padding: 0 24px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon {
+      width: 38px; height: 38px; background: rgba(255,255,255,0.15);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    }
+    .logo-icon svg { width: 20px; height: 20px; }
+    .logo-text { font-size: 20px; font-weight: 600; color: white; }
+    .nav { display: flex; align-items: center; gap: 22px; background: transparent; }
+    .nav a {
+      color: rgba(255,255,255,0.92); text-decoration: none;
+      font-size: 14.5px; font-weight: 500; transition: color 0.25s; background: transparent;
+    }
+    .nav a:hover { color: #fff; }
+    .nav a.active { color: #fff; border-bottom: 2px solid #a5d6a7; padding-bottom: 2px; }
+    .cta-btn {
+      background: white !important; color: #1b5e20 !important; padding: 9px 20px;
+      border-radius: 50px; font-weight: 600; font-size: 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12); transition: all 0.3s;
+    }
+    .cta-btn:hover { background: #e8f5e9 !important; transform: translateY(-2px); }
+    .menu-toggle { display: none; background: none; border: none; cursor: pointer; padding: 6px; }
+    .menu-toggle span {
+      display: block; width: 22px; height: 2.5px; background: white;
+      margin: 5px 0; border-radius: 3px;
+    }
+    @media (max-width: 980px) {
+      .nav {
+        position: fixed; top: 68px; left: 0; right: 0; background: #1b5e20;
+        flex-direction: column; gap: 0; padding: 16px 0 24px;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+        transform: translateY(-12px); opacity: 0; visibility: hidden; transition: all 0.3s;
+      }
+      .nav.active { transform: translateY(0); opacity: 1; visibility: visible; }
+      .nav a {
+        width: 100%; text-align: center; padding: 13px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+      }
+      .nav a:last-child { border-bottom: none; margin-top: 10px; width: auto; display: inline-block; }
+      .menu-toggle { display: block; }
+    }
+
+    /* ===== PAGE HERO ===== */
+    .page-hero {
+      background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+      padding: 55px 24px; text-align: center;
+    }
+    .page-hero h1 { font-size: 32px; color: #1b5e20; margin-bottom: 10px; }
+    .page-hero p { color: #555; max-width: 600px; margin: 0 auto; font-size: 16px; }
+
+    /* ===== BLOG ===== */
+    .blog-section {
+      max-width: 860px; margin: 0 auto; padding: 50px 24px 30px;
+    }
+
+    .blog-card {
+      background: white;
+      border-radius: 18px;
+      padding: 28px 30px;
+      margin-bottom: 24px;
+      box-shadow: 0 6px 22px rgba(0,0,0,0.06);
+      transition: transform 0.3s, box-shadow 0.3s;
+      border: 1px solid #f0f0f0;
+    }
+    .blog-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+    }
+    .blog-card.featured {
+      border-left: 5px solid #2e7d32;
+      background: linear-gradient(to right, #f1f8e9, #ffffff);
+    }
+
+    .category {
+      display: inline-block;
+      background: #e8f5e9;
+      color: #2e7d32;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 14px;
+      border-radius: 30px;
+      margin-bottom: 12px;
+    }
+    .blog-card h2 {
+      color: #1b5e20;
+      font-size: 21px;
+      margin-bottom: 12px;
+      line-height: 1.35;
+    }
+    .excerpt {
+      color: #555;
+      font-size: 15px;
+      margin-bottom: 16px;
+    }
+
+    .full-content {
+      display: none;
+      margin-top: 8px;
+      padding-top: 18px;
+      border-top: 1px solid #e8f5e9;
+      color: #444;
+      font-size: 15px;
+      line-height: 1.75;
+    }
+    .full-content p { margin-bottom: 14px; }
+    .full-content h3 {
+      color: #1b5e20;
+      font-size: 17px;
+      margin: 20px 0 8px;
+    }
+    .full-content ul {
+      margin: 10px 0 16px 22px;
+    }
+    .full-content ul li { margin-bottom: 6px; }
+
+    .read-more-btn {
+      background: none;
+      border: none;
+      color: #2e7d32;
+      font-weight: 600;
+      font-size: 14.5px;
+      cursor: pointer;
+      padding: 0;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .read-more-btn:hover { text-decoration: underline; }
+
+    /* CTA */
+    .consult-cta {
+      background: linear-gradient(135deg, #1b5e20, #2e7d32);
+      color: white;
+      text-align: center;
+      padding: 45px 24px;
+      border-radius: 18px;
+      margin: 20px 0 10px;
+    }
+    .consult-cta h2 { font-size: 23px; margin-bottom: 10px; }
+    .consult-cta p { opacity: 0.9; margin-bottom: 20px; max-width: 480px; margin-left: auto; margin-right: auto; }
+    .consult-cta a {
+      display: inline-block;
+      background: white;
+      color: #1b5e20;
+      padding: 13px 30px;
+      border-radius: 50px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    .consult-cta a:hover { background: #e8f5e9; transform: translateY(-2px); }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: #1b5e20;
+      color: rgba(255,255,255,0.85);
+      padding: 40px 24px 24px;
+      margin-top: 40px;
+    }
+    .footer-content {
+      max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px;
+    }
+    .footer-col h4 { color: white; margin-bottom: 14px; }
+    .footer-col a, .footer-col p {
+      color: rgba(255,255,255,0.75); text-decoration: none;
+      font-size: 14px; display: block; margin-bottom: 8px;
+    }
+    .footer-col a:hover { color: white; }
+    .footer-bottom {
+      text-align: center; margin-top: 30px; padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.15); font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-container">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="24" r="22" fill="rgba(255,255,255,0.15)"/>
+            <path d="M24 8C24 8 12 14 12 28C12 35 16 40 22 44C28 40 32 35 32 28C32 14 24 8 24 8Z" fill="white"/>
+            <path d="M34 16C20 20 16 32 12 42L16 44C20 34 24 26 34 24V16Z" fill="white" fill-opacity="0.7"/>
+            <path d="M22 20H26V26H32V30H26V36H22V30H16V26H22V20Z" fill="#1b5e20"/>
+          </svg>
+        </div>
+        <span class="logo-text">Dr. Stephen Karimi</span>
+      </a>
+      <nav class="nav" id="navMenu">
+        <a href="home.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="services.html">Services</a>
+        <a href="meal-plans.html">Meal Plans</a>
+        <a href="recipes.html">Recipes</a>
+        <a href="calculators.html">Calculators</a>
+        <a href="blog.html" class="active">Blog</a>
+        <a href="contact.html" class="cta-btn">Contact</a>
+      </nav>
+      <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="page-hero">
+    <h1>Nutrition Blog</h1>
+    <p>Practical tips, science-backed advice and healthy living guidance for everyday Kenyans.</p>
+  </section>
+
+  <!-- BLOG POSTS -->
+  <section class="blog-section">
+
+    <!-- Featured -->
+    <article class="blog-card featured">
+      <span class="category">Featured</span>
+      <h2>5 Simple Ways to Eat Healthier on a Budget in Kenya</h2>
+      <p class="excerpt">
+        Eating well doesn’t have to be expensive. Discover how everyday local foods can help you build balanced, nutritious meals without overspending.
+      </p>
+      <div class="full-content" id="article1">
+        <p>Many people think healthy eating is expensive. The truth is, some of the most nutritious foods in Kenya are also the most affordable.</p>
+        <h3>1. Make Sukuma Wiki your daily green</h3>
+        <p>Sukuma wiki is packed with vitamins, iron and fibre. Lightly steam or sauté it instead of overcooking.</p>
+        <h3>2. Eat beans and lentils regularly</h3>
+        <p>Beans are an excellent source of plant protein and fibre. A simple bean stew with vegetables can be a complete meal.</p>
+        <h3>3. Include eggs several times a week</h3>
+        <p>Eggs are one of the cheapest high-quality protein sources available.</p>
+        <h3>4. Choose local fruits in season</h3>
+        <p>Bananas, mangoes, oranges and avocados provide vitamins at a much lower cost than imported snacks.</p>
+        <h3>5. Cook more meals at home</h3>
+        <p>Home cooking gives you full control over oil, salt and sugar while saving money.</p>
+      </div>
+      <button class="read-more-btn" onclick="toggleArticle('article1', this)">Read full article →</button>
+    </article>
+
+    <!-- Diabetes -->
+    <article class="blog-card">
+      <span class="category">Diabetes</span>
+      <h2>Managing Blood Sugar with Everyday Kenyan Foods</h2>
+      <p class="excerpt">
+        The right food choices can make a big difference if you have diabetes or prediabetes. Learn which local foods help keep blood sugar stable.
+      </p>
+      <div class="full-content" id="article2">
+        <p>Food is one of the most powerful tools for managing blood sugar. You don’t need special imported products.</p>
+        <h3>Best foods for stable blood sugar</h3>
+        <ul>
+          <li>Sukuma wiki, managu, terere</li>
+          <li>Beans, ndengu and green grams</li>
+          <li>Sweet potatoes (in moderate portions)</li>
+          <li>Oats and millet (wimbi)</li>
+          <li>Fish, eggs and lean meat</li>
+        </ul>
+        <h3>Foods to limit</h3>
+        <ul>
+          <li>White ugali, white rice and white bread in large amounts</li>
+          <li>Sugary drinks and packaged juices</li>
+          <li>Fried snacks and heavily processed foods</li>
+        </ul>
+      </div>
+      <button class="read-more-btn" onclick="toggleArticle('article2', this)">Read full article →</button>
+    </article>
+
+    <!-- Weight Loss -->
+    <article class="blog-card">
+      <span class="category">Weight Loss</span>
+      <h2>Why Crash Diets Fail (And What Actually Works)</h2>
+      <p class="excerpt">
+        Extreme diets often lead to quick results followed by weight regain. Here’s what sustainable weight loss really looks like.
+      </p>
+      <div class="full-content" id="article3">
+        <p>Crash diets usually fail because they are too restrictive and hard to maintain long-term.</p>
+        <h3>What actually works</h3>
+        <ul>
+          <li>Creating a moderate calorie deficit you can stick to</li>
+          <li>Eating enough protein and fibre to stay full</li>
+          <li>Including foods you enjoy in the right portions</li>
+          <li>Moving your body regularly</li>
+          <li>Focusing on consistency instead of perfection</li>
+        </ul>
+        <p>Sustainable weight loss is usually slow — about 0.5 to 1 kg per week — but the results last much longer.</p>
+      </div>
+      <button class="read-more-btn" onclick="toggleArticle('article3', this)">Read full article →</button>
+    </article>
+
+    <!-- Protein -->
+    <article class="blog-card">
+      <span class="category">Nutrition Basics</span>
+      <h2>Protein Myths Debunked: How Much Do You Really Need?</h2>
+      <p class="excerpt">
+        Understand your actual protein needs and the best affordable sources available in Kenya.
+      </p>
+      <div class="full-content" id="article4">
+        <p>Most healthy adults need about 0.8–1.2 grams of protein per kilogram of body weight per day.</p>
+        <h3>Affordable protein sources</h3>
+        <ul>
+          <li>Eggs</li>
+          <li>Beans, ndengu, green grams and lentils</li>
+          <li>Omena and dagaa</li>
+          <li>Chicken and fish</li>
+          <li>Milk and mala</li>
+          <li>Groundnuts</li>
+        </ul>
+      </div>
+      <button class="read-more-btn" onclick="toggleArticle('article4', this)">Read full article →</button>
+    </article>
+
+    <!-- Anaemia -->
+    <article class="blog-card">
+      <span class="category">Anaemia</span>
+      <h2>Best Local Foods to Increase Blood Levels Naturally</h2>
+      <p class="excerpt">
+        Feeling tired and weak? Discover iron-rich Kenyan foods and simple ways to improve iron absorption.
+      </p>
+      <div class="full-content" id="article5">
+        <h3>Iron-rich local foods</h3>
+        <ul>
+          <li>Liver (chicken or beef)</li>
+          <li>Sukuma wiki and other dark leafy greens</li>
+          <li>Beans and lentils</li>
+          <li>Omena</li>
+          <li>Millet (wimbi)</li>
+        </ul>
+        <p>Pair iron-rich foods with vitamin C sources like lemon, oranges or tomatoes to improve absorption. Avoid tea or coffee with these meals.</p>
+      </div>
+      <button class="read-more-btn" onclick="toggleArticle('article5', this)">Read full article →</button>
+    </article>
+
+    <!-- Family -->
+    <article class="blog-card">
+      <span class="category">Family Nutrition</span>
+      <h2>Healthy Meals the Whole Family Will Actually Eat</h2>
+      <p class="excerpt">
+        Practical ideas for preparing nutritious meals that both children and adults enjoy.
+      </p>
+      <div class="full-content" id="article6">
+        <ul>
+          <li>Involve children in simple cooking tasks</li>
+          <li>Serve vegetables in familiar ways</li>
+          <li>Keep a base meal and let everyone add toppings</li>
+          <li>Make healthier versions of favourite foods</li>
+          <li>Be patient — it can take several tries before a child accepts a new food</li>
+        </ul>
+      </div>
+      <button class="read-more-btn" onclick="toggleArticle('article6', this)">Read full article →</button>
+    </article>
+
+    <!-- CTA -->
+    <div class="consult-cta">
+      <h2>Want personalized advice?</h2>
+      <p>These articles give general guidance. For a plan tailored to your health goals, book a consultation with Dr. Stephen Karimi.</p>
+      <a href="contact.html">Book a Consultation</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-col">
+        <h4>Dr. Stephen Karimi</h4>
+        <p>Certified Nutritionist helping clients achieve lasting health through personalized nutrition.</p>
+      </div>
+      
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <p>📍 Nyeri, Kenya</p>
+        <p>📞 +254 720 027 993</p>
+        <p>✉️ info@drstephengathiga2026@gmail.com</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2026 Dr. Stephen Karimi Nutrition. All rights reserved.
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu
+    document.getElementById('menuToggle').addEventListener('click', function() {
+      document.getElementById('navMenu').classList.toggle('active');
+    });
+
+    // Expand / collapse articles
+    function toggleArticle(id, btn) {
+      var content = document.getElementById(id);
+      if (content.style.display === 'block') {
+        content.style.display = 'none';
+        btn.innerHTML = 'Read full article →';
+      } else {
+        content.style.display = 'block';
+        btn.innerHTML = 'Show less ↑';
+      }
+    }
+  </script>
+</body>
+</html>

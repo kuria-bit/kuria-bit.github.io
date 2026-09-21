@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Services & Pricing | Dr. Stephen Karimi – Nutritionist</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #f7f9f4;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* ===== HEADER ===== */
+    .header {
+      position: sticky; top: 0; z-index: 1000;
+      background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 50%, #388e3c 100%);
+      box-shadow: 0 4px 20px rgba(27, 94, 32, 0.25);
+      padding: 14px 0;
+    }
+    .header-container {
+      max-width: 1200px; margin: 0 auto; padding: 0 24px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon {
+      width: 38px; height: 38px; background: rgba(255,255,255,0.15);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    }
+    .logo-icon svg { width: 20px; height: 20px; }
+    .logo-text { font-size: 20px; font-weight: 600; color: white; }
+    .nav { display: flex; align-items: center; gap: 22px; }
+    .nav a {
+      color: rgba(255,255,255,0.92); text-decoration: none;
+      font-size: 14.5px; font-weight: 500; transition: color 0.25s;
+    }
+    .nav a:hover, .nav a.active { color: #fff; }
+    .nav a.active { border-bottom: 2px solid #a5d6a7; padding-bottom: 2px; }
+    .cta-btn {
+      background: white; color: #1b5e20 !important; padding: 9px 20px;
+      border-radius: 50px; font-weight: 600; font-size: 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12); transition: all 0.3s;
+    }
+    .cta-btn:hover { background: #e8f5e9; transform: translateY(-2px); }
+    .menu-toggle { display: none; background: none; border: none; cursor: pointer; padding: 6px; }
+    .menu-toggle span {
+      display: block; width: 22px; height: 2.5px; background: white;
+      margin: 5px 0; border-radius: 3px;
+    }
+    @media (max-width: 980px) {
+      .nav {
+        position: fixed; top: 68px; left: 0; right: 0; background: #1b5e20;
+        flex-direction: column; gap: 0; padding: 16px 0 24px;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+        transform: translateY(-12px); opacity: 0; visibility: hidden; transition: all 0.3s;
+      }
+      .nav.active { transform: translateY(0); opacity: 1; visibility: visible; }
+      .nav a {
+        width: 100%; text-align: center; padding: 13px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+      }
+      .nav a:last-child { border-bottom: none; margin-top: 10px; width: auto; display: inline-block; }
+      .menu-toggle { display: block; }
+    }
+
+    /* ===== PAGE HERO ===== */
+    .page-hero {
+      background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+      padding: 50px 24px; text-align: center;
+    }
+    .page-hero h1 { font-size: 32px; color: #1b5e20; margin-bottom: 10px; }
+    .page-hero p { color: #555; max-width: 620px; margin: 0 auto; font-size: 16px; }
+
+    /* ===== SERVICES ===== */
+    .services-section { max-width: 1100px; margin: 0 auto; padding: 50px 24px 30px; }
+    .services-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;
+    }
+    .service-card {
+      background: white; border-radius: 16px; padding: 28px 24px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.06); transition: transform 0.3s;
+      display: flex; flex-direction: column;
+    }
+    .service-card:hover { transform: translateY(-5px); }
+    .service-card .icon { font-size: 36px; margin-bottom: 14px; }
+    .service-card h3 { color: #1b5e20; margin-bottom: 10px; font-size: 19px; }
+    .service-card p { color: #555; font-size: 14.5px; margin-bottom: 14px; flex-grow: 1; }
+    .service-card ul { list-style: none; margin-bottom: 18px; }
+    .service-card ul li {
+      font-size: 14px; color: #666; padding: 5px 0 5px 20px; position: relative;
+    }
+    .service-card ul li::before {
+      content: "✓"; position: absolute; left: 0; color: #2e7d32; font-weight: bold;
+    }
+    .price {
+      font-size: 22px; font-weight: 700; color: #1b5e20; margin-bottom: 16px;
+    }
+    .price small { font-size: 13px; font-weight: 500; color: #666; }
+    .service-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn-pay {
+      background: #2e7d32; color: white; border: none; padding: 11px 20px;
+      border-radius: 50px; font-weight: 600; font-size: 14px; cursor: pointer;
+      text-decoration: none; transition: background 0.3s;
+    }
+    .btn-pay:hover { background: #1b5e20; }
+    .btn-consult {
+      background: transparent; color: #2e7d32; border: 2px solid #2e7d32;
+      padding: 9px 18px; border-radius: 50px; font-weight: 600; font-size: 14px;
+      text-decoration: none; transition: all 0.3s;
+    }
+    .btn-consult:hover { background: #e8f5e9; }
+
+    /* ===== M-PESA SECTION ===== */
+    .mpesa-section {
+      max-width: 1100px; margin: 20px auto 40px; padding: 0 24px;
+    }
+    .mpesa-box {
+      background: linear-gradient(180deg, #ffffff 0%, #f1f8e9 100%);
+      border: 2px solid #c8e6c9; border-radius: 16px; padding: 30px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+    }
+    .mpesa-header {
+      display: flex; align-items: center; gap: 14px; margin-bottom: 22px;
+    }
+    .mpesa-logo {
+      background: #4caf50; color: white; width: 52px; height: 52px;
+      border-radius: 12px; display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 13px;
+    }
+    .mpesa-header h2 { color: #1b5e20; font-size: 22px; margin: 0; }
+    .mpesa-header p { font-size: 14px; color: #666; margin: 0; }
+
+    .till-box {
+      background: #1b5e20; color: white; border-radius: 12px;
+      padding: 22px; text-align: center; margin-bottom: 24px;
+    }
+    .till-box .label { font-size: 13px; opacity: 0.85; margin-bottom: 4px; }
+    .till-box .number { font-size: 34px; font-weight: 700; letter-spacing: 3px; }
+    .till-box .name { font-size: 14px; margin-top: 6px; opacity: 0.9; }
+
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 20px; }
+    .step {
+      display: flex; gap: 12px; align-items: flex-start;
+      background: white; padding: 14px; border-radius: 10px;
+    }
+    .step-num {
+      background: #2e7d32; color: white; width: 26px; height: 26px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; flex-shrink: 0;
+    }
+    .step p { font-size: 13.5px; color: #444; }
+
+    .confirm-note {
+      background: #fff8e1; border-left: 4px solid #ffc107;
+      padding: 14px 16px; border-radius: 0 8px 8px 0; font-size: 14px; color: #555;
+    }
+
+    /* Consultation CTA */
+    .consult-cta {
+      background: linear-gradient(135deg, #1b5e20, #2e7d32);
+      color: white; text-align: center; padding: 45px 24px;
+      border-radius: 16px; margin: 10px 24px 50px;
+      max-width: 1100px; margin-left: auto; margin-right: auto;
+    }
+    .consult-cta h2 { font-size: 24px; margin-bottom: 10px; }
+    .consult-cta p { opacity: 0.9; margin-bottom: 20px; max-width: 500px; margin-left: auto; margin-right: auto; }
+    .consult-cta a {
+      display: inline-block; background: white; color: #1b5e20;
+      padding: 13px 30px; border-radius: 50px; font-weight: 600;
+      text-decoration: none; transition: all 0.3s;
+    }
+    .consult-cta a:hover { background: #e8f5e9; transform: translateY(-2px); }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: #1b5e20; color: rgba(255,255,255,0.85);
+      padding: 40px 24px 24px;
+    }
+    .footer-content {
+      max-width: 1100px; margin: 0 auto; display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px;
+    }
+    .footer-col h4 { color: white; margin-bottom: 14px; }
+    .footer-col a, .footer-col p {
+      color: rgba(255,255,255,0.75); text-decoration: none;
+      font-size: 14px; display: block; margin-bottom: 8px;
+    }
+    .footer-col a:hover { color: white; }
+    .footer-bottom {
+      text-align: center; margin-top: 30px; padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.15); font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-container">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="24" r="22" fill="rgba(255,255,255,0.15)"/>
+            <path d="M24 8C24 8 12 14 12 28C12 35 16 40 22 44C28 40 32 35 32 28C32 14 24 8 24 8Z" fill="white"/>
+            <path d="M34 16C20 20 16 32 12 42L16 44C20 34 24 26 34 24V16Z" fill="white" fill-opacity="0.7"/>
+            <path d="M22 20H26V26H32V30H26V36H22V30H16V26H22V20Z" fill="#1b5e20"/>
+          </svg>
+        </div>
+        <span class="logo-text">Dr. Stephen Karimi</span>
+      </a>
+      <nav class="nav" id="navMenu">
+        <a href="home.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="services.html" class="active">Services</a>
+        <a href="meal plans.html">Meal Plans</a>
+        <a href="recipes.html">Recipes</a>
+        <a href="calculators.html">Calculators</a>
+        <a href="blog.html">Blog</a>
+        <a href="contact.html" class="cta-btn">Contact</a>
+      </nav>
+      <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <h1>Our Services & Pricing</h1>
+    <p>Professional nutrition services tailored to your health goals. Pay securely via M-Pesa Till.</p>
+  </section>
+
+  <!-- SERVICES GRID -->
+  <section class="services-section">
+    <div class="services-grid">
+
+      <!-- Service 1 -->
+      <div class="service-card">
+        <div class="icon">🩺</div>
+        <h3>Initial Consultation</h3>
+        <p>Comprehensive assessment of your health, lifestyle, eating habits and goals.</p>
+        <ul>
+          <li>60-minute session (online or in-person)</li>
+          <li>Full nutritional assessment</li>
+          <li>Personalized recommendations</li>
+          <li>Follow-up action plan</li>
+        </ul>
+        <div class="price">KES 2,500 <small>/ session</small></div>
+        <div class="service-actions">
+          <a href="#mpesa" class="btn-pay" onclick="selectService(2500)">Pay via M-Pesa</a>
+          <a href="contact.html" class="btn-consult">Book Consultation</a>
+        </div>
+      </div>
+
+      <!-- Service 2 -->
+      <div class="service-card">
+        <div class="icon">📋</div>
+        <h3>Personalized Meal Plan</h3>
+        <p>Custom weekly meal plans tailored to your preferences, budget and health needs.</p>
+        <ul>
+          <li>7-day customized meal plan</li>
+          <li>Shopping list included</li>
+          <li>Kenyan-friendly recipes</li>
+          <li>Adjustable for budget</li>
+        </ul>
+        <div class="price">KES 2,500 <small>/ plan</small></div>
+        <div class="service-actions">
+          <a href="#mpesa" class="btn-pay" onclick="selectService(2500)">Pay via M-Pesa</a>
+          <a href="contact.html" class="btn-consult">Book Consultation</a>
+        </div>
+      </div>
+
+      <!-- Service 3 -->
+      <div class="service-card">
+        <div class="icon">❤️</div>
+        <h3>Medical Nutrition Therapy</h3>
+        <p>Specialized support for chronic conditions and disease management.</p>
+        <ul>
+          <li>Diabetes management</li>
+          <li>Hypertension support</li>
+          <li>PCOS & hormonal balance</li>
+          <li>Digestive health guidance</li>
+        </ul>
+        <div class="price">KES 2,500 <small>/ session</small></div>
+        <div class="service-actions">
+          <a href="#mpesa" class="btn-pay" onclick="selectService(2500)">Pay via M-Pesa</a>
+          <a href="contact.html" class="btn-consult">Book Consultation</a>
+        </div>
+      </div>
+
+      <!-- Service 4 -->
+      <div class="service-card">
+        <div class="icon">💪</div>
+        <h3>Weight Management Program</h3>
+        <p>Structured 8–12 week program for sustainable weight loss or healthy weight gain.</p>
+        <ul>
+          <li>Weekly check-ins</li>
+          <li>Custom meal plans</li>
+          <li>Progress tracking</li>
+          <li>Habit coaching</li>
+        </ul>
+        <div class="price">From KES 4,000 <small>/ program</small></div>
+        <div class="service-actions">
+          <a href="#mpesa" class="btn-pay" onclick="selectService(4000)">Pay via M-Pesa</a>
+          <a href="contact.html" class="btn-consult">Book Consultation</a>
+        </div>
+      </div>
+
+      <!-- Service 5 -->
+      <div class="service-card">
+        <div class="icon">🏃</div>
+        <h3>Sports Nutrition</h3>
+        <p>Performance-focused nutrition for athletes and active individuals.</p>
+        <ul>
+          <li>Pre & post workout nutrition</li>
+          <li>Hydration strategies</li>
+          <li>Supplement guidance</li>
+          <li>Body composition goals</li>
+        </ul>
+        <div class="price">KES 2500 <small>/ session</small></div>
+        <div class="service-actions">
+          <a href="#mpesa" class="btn-pay" onclick="selectService(2500)">Pay via M-Pesa</a>
+          <a href="contact.html" class="btn-consult">Book Consultation</a>
+        </div>
+      </div>
+
+      <!-- Service 6 -->
+      <div class="service-card">
+        <div class="icon">👨‍👩‍👧</div>
+        <h3>Family Nutrition Package</h3>
+        <p>Healthy eating solutions designed for the whole family.</p>
+        <ul>
+          <li>Family meal planning</li>
+          <li>Kids nutrition guidance</li>
+          <li>Budget-friendly options</li>
+          <li>Practical cooking tips</li>
+        </ul>
+        <div class="price">KES 2,500 <small>/ package</small></div>
+        <div class="service-actions">
+          <a href="#mpesa" class="btn-pay" onclick="selectService(2500)">Pay via M-Pesa</a>
+          <a href="contact.html" class="btn-consult">Book Consultation</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- M-PESA PAYMENT SECTION -->
+  <section class="mpesa-section" id="mpesa">
+    <div class="mpesa-box">
+      <div class="mpesa-header">
+        <div class="mpesa-logo">M-PESA</div>
+        <div>
+          <h2>Pay via M-Pesa Till</h2>
+          <p>Secure and instant payment for any service</p>
+        </div>
+      </div>
+
+      <div class="till-box">
+        <div class="label">TILL NUMBER</div>
+        <div class="number">8210860</div>
+        <div class="name">Dr. Stephen Karimi Nutrition</div>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <p>Go to <strong>M-Pesa</strong> on your phone</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <p>Select <strong>Lipa na M-Pesa</strong> → <strong>Buy Goods</strong></p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <p>Enter Till Number: <strong>8210860</strong></p>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <p>Enter the amount and your M-Pesa PIN</p>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <p>Send the confirmation SMS to <strong>+254 720 027 993</strong></p>
+        </div>
+      </div>
+
+      <div class="confirm-note">
+        <strong>Important:</strong> After payment, please send the M-Pesa confirmation message via WhatsApp or SMS. 
+        You will receive a booking confirmation and next steps instantly.you can also pay in instalment.
+      </div>
+    </div>
+  </section>
+
+  <!-- CONSULTATION CTA -->
+  <div class="consult-cta">
+    <h2>Not sure which service is right for you?</h2>
+    <p>Book a free quick consultation call and Dr. Stephen Karimi will recommend the best option for your goals.</p>
+    <a href="contact.html">Book a Consultation</a>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-col">
+        <h4>Dr. Stephen Karimi</h4>
+        <p>Certified Nutritionist helping clients achieve lasting health through personalized nutrition.</p>
+      </div>
+      
+        
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <p>📍 Nyeri, Kenya</p>
+        <p>📞 +254 720 027 993</p>
+        <p>✉️ info@drstephengathiga2026@gmail.com</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2026 Dr. Stephen Karimi Nutrition. All rights reserved.
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu
+    document.getElementById('menuToggle').addEventListener('click', () => {
+      document.getElementById('navMenu').classList.toggle('active');
+    });
+
+    // Optional: highlight selected amount
+    function selectService(amount) {
+      // You can expand this later to show selected amount
+      console.log('Selected amount: KES ' + amount);
+    }
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Healthy Recipes | Dr. Stephen Karimi – Nutritionist</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #f7f9f4;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* ===== HEADER ===== */
+    .header {
+      position: sticky; top: 0; z-index: 1000;
+      background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 50%, #388e3c 100%);
+      box-shadow: 0 4px 20px rgba(27, 94, 32, 0.25);
+      padding: 14px 0;
+    }
+    .header-container {
+      max-width: 1200px; margin: 0 auto; padding: 0 24px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon {
+      width: 38px; height: 38px; background: rgba(255,255,255,0.15);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    }
+    .logo-icon svg { width: 20px; height: 20px; }
+    .logo-text { font-size: 20px; font-weight: 600; color: white; }
+    .nav { display: flex; align-items: center; gap: 22px; }
+    .nav a {
+      color: rgba(255,255,255,0.92); text-decoration: none;
+      font-size: 14.5px; font-weight: 500; transition: color 0.25s;
+    }
+    .nav a:hover, .nav a.active { color: #fff; }
+    .nav a.active { border-bottom: 2px solid #a5d6a7; padding-bottom: 2px; }
+    .cta-btn {
+      background: white; color: #1b5e20 !important; padding: 9px 20px;
+      border-radius: 50px; font-weight: 600; font-size: 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12); transition: all 0.3s;
+    }
+    .cta-btn:hover { background: #e8f5e9; transform: translateY(-2px); }
+    .menu-toggle { display: none; background: none; border: none; cursor: pointer; padding: 6px; }
+    .menu-toggle span {
+      display: block; width: 22px; height: 2.5px; background: white;
+      margin: 5px 0; border-radius: 3px;
+    }
+    @media (max-width: 980px) {
+      .nav {
+        position: fixed; top: 68px; left: 0; right: 0; background: #1b5e20;
+        flex-direction: column; gap: 0; padding: 16px 0 24px;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+        transform: translateY(-12px); opacity: 0; visibility: hidden; transition: all 0.3s;
+      }
+      .nav.active { transform: translateY(0); opacity: 1; visibility: visible; }
+      .nav a {
+        width: 100%; text-align: center; padding: 13px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+      }
+      .nav a:last-child { border-bottom: none; margin-top: 10px; width: auto; display: inline-block; }
+      .menu-toggle { display: block; }
+    }
+
+    /* ===== PAGE HERO ===== */
+    .page-hero {
+      background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+      padding: 50px 24px; text-align: center;
+    }
+    .page-hero h1 { font-size: 32px; color: #1b5e20; margin-bottom: 10px; }
+    .page-hero p { color: #555; max-width: 650px; margin: 0 auto; font-size: 16px; }
+
+    /* ===== CATEGORY TABS ===== */
+    .categories {
+      max-width: 1100px; margin: 30px auto 10px; padding: 0 24px;
+      display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+    }
+    .cat-btn {
+      background: white; border: 2px solid #c8e6c9; color: #2e7d32;
+      padding: 10px 18px; border-radius: 50px; font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: all 0.25s;
+    }
+    .cat-btn:hover, .cat-btn.active {
+      background: #2e7d32; color: white; border-color: #2e7d32;
+    }
+
+    /* ===== RECIPES SECTION ===== */
+    .recipes-section { max-width: 1100px; margin: 0 auto; padding: 30px 24px 50px; }
+    .category-block { margin-bottom: 50px; }
+    .category-block h2 {
+      color: #1b5e20; font-size: 22px; margin-bottom: 8px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .category-block .desc { color: #666; font-size: 14.5px; margin-bottom: 22px; }
+
+    .recipes-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 22px;
+    }
+    .recipe-card {
+      background: white; border-radius: 16px; overflow: hidden;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.06); transition: transform 0.3s;
+    }
+    .recipe-card:hover { transform: translateY(-5px); }
+    .recipe-img {
+      height: 150px; display: flex; align-items: center; justify-content: center;
+      font-size: 52px;
+    }
+    .recipe-img.diabetes { background: linear-gradient(135deg, #e8f5e9, #a5d6a7); }
+    .recipe-img.heart { background: linear-gradient(135deg, #ffebee, #ef9a9a); }
+    .recipe-img.blood { background: linear-gradient(135deg, #fce4ec, #f48fb1); }
+    .recipe-img.weight { background: linear-gradient(135deg, #e3f2fd, #90caf9); }
+    .recipe-img.energy { background: linear-gradient(135deg, #fff8e1, #ffe082); }
+    .recipe-img.general { background: linear-gradient(135deg, #e8f5e9, #81c784); }
+
+    .recipe-body { padding: 20px; }
+    .recipe-body h3 { color: #1b5e20; font-size: 17px; margin-bottom: 6px; }
+    .recipe-meta { font-size: 12.5px; color: #888; margin-bottom: 10px; }
+    .recipe-body p { font-size: 14px; color: #555; margin-bottom: 12px; }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+    .tag {
+      background: #e8f5e9; color: #2e7d32; font-size: 11.5px;
+      padding: 3px 10px; border-radius: 20px; font-weight: 500;
+    }
+    .tag.heart-tag { background: #ffebee; color: #c62828; }
+    .tag.blood-tag { background: #fce4ec; color: #ad1457; }
+    .tag.weight-tag { background: #e3f2fd; color: #1565c0; }
+
+    .benefits {
+      font-size: 13px; color: #555; background: #f9fbe7;
+      padding: 10px 12px; border-radius: 8px; margin-bottom: 14px;
+    }
+    .benefits strong { color: #1b5e20; }
+
+    /* Consultation CTA */
+    .consult-cta {
+      background: linear-gradient(135deg, #1b5e20, #2e7d32);
+      color: white; text-align: center; padding: 45px 24px;
+      border-radius: 16px; margin: 20px 24px 50px;
+      max-width: 1100px; margin-left: auto; margin-right: auto;
+    }
+    .consult-cta h2 { font-size: 24px; margin-bottom: 10px; }
+    .consult-cta p { opacity: 0.9; margin-bottom: 20px; max-width: 500px; margin-left: auto; margin-right: auto; }
+    .consult-cta a {
+      display: inline-block; background: white; color: #1b5e20;
+      padding: 13px 30px; border-radius: 50px; font-weight: 600;
+      text-decoration: none; transition: all 0.3s;
+    }
+    .consult-cta a:hover { background: #e8f5e9; transform: translateY(-2px); }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: #1b5e20; color: rgba(255,255,255,0.85);
+      padding: 40px 24px 24px;
+    }
+    .footer-content {
+      max-width: 1100px; margin: 0 auto; display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px;
+    }
+    .footer-col h4 { color: white; margin-bottom: 14px; }
+    .footer-col a, .footer-col p {
+      color: rgba(255,255,255,0.75); text-decoration: none;
+      font-size: 14px; display: block; margin-bottom: 8px;
+    }
+    .footer-col a:hover { color: white; }
+    .footer-bottom {
+      text-align: center; margin-top: 30px; padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.15); font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-container">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="24" r="22" fill="rgba(255,255,255,0.15)"/>
+            <path d="M24 8C24 8 12 14 12 28C12 35 16 40 22 44C28 40 32 35 32 28C32 14 24 8 24 8Z" fill="white"/>
+            <path d="M34 16C20 20 16 32 12 42L16 44C20 34 24 26 34 24V16Z" fill="white" fill-opacity="0.7"/>
+            <path d="M22 20H26V26H32V30H26V36H22V30H16V26H22V20Z" fill="#1b5e20"/>
+          </svg>
+        </div>
+        <span class="logo-text">Dr. Stephen Karimi</span>
+      </a>
+      <nav class="nav" id="navMenu">
+        <a href="home.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="services.html">Services</a>
+        <a href="meal plans.html">Meal Plans</a>
+        <a href="recipes.html" class="active">Recipes</a>
+        <a href="calculators.html">Calculators</a>
+        <a href="blog.html">Blog</a>
+        <a href="contact.html" class="cta-btn">Contact</a>
+      </nav>
+      <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <h1>Healthy Recipes for Every Need</h1>
+    <p>Science-backed recipes designed for diabetes, heart health, boosting blood levels, weight management and more — using ingredients easily found in Kenya.</p>
+  </section>
+
+  <!-- CATEGORY FILTER BUTTONS -->
+  <div class="categories">
+    <button class="cat-btn active" onclick="filterCategory('all')">All Recipes</button>
+    <button class="cat-btn" onclick="filterCategory('diabetes')">Diabetes-Friendly</button>
+    <button class="cat-btn" onclick="filterCategory('heart')">Heart Health</button>
+    <button class="cat-btn" onclick="filterCategory('blood')">Boost Blood / Iron</button>
+    <button class="cat-btn" onclick="filterCategory('weight')">Weight Management</button>
+    <button class="cat-btn" onclick="filterCategory('energy')">Energy & Immunity</button>
+  </div>
+
+  <!-- RECIPES -->
+  <section class="recipes-section">
+
+    <!-- DIABETES -->
+    <div class="category-block" data-category="diabetes">
+      <h2>🩸 Diabetes-Friendly Recipes</h2>
+      <p class="desc">Low glycemic index meals that help keep blood sugar stable.</p>
+      <div class="recipes-grid">
+        <div class="recipe-card">
+          <div class="recipe-img diabetes">🥗</div>
+          <div class="recipe-body">
+            <h3>Sukuma Wiki & Egg Power Bowl</h3>
+            <div class="recipe-meta">⏱ 20 min · 🔥 290 kcal · GI: Low</div>
+            <p>Steamed sukuma wiki sautéed with onions, served with boiled eggs and a small portion of brown ugali.</p>
+            <div class="tags">
+              <span class="tag">Low GI</span>
+              <span class="tag">High Protein</span>
+              <span class="tag">Budget</span>
+            </div>
+            <div class="benefits"><strong>Benefits:</strong> Stabilizes blood sugar, rich in fibre and protein.</div>
+          </div>
+        </div>
+        <div class="recipe-card">
+          <div class="recipe-img diabetes">🍲</div>
+          <div class="recipe-body">
+            <h3>Lentil & Vegetable Stew</h3>
+            <div class="recipe-meta">⏱ 35 min · 🔥 310 kcal · GI: Low</div>
+            <p>Green lentils simmered with carrots, tomatoes, spinach and mild spices. Serve with a small portion of sweet potato.</p>
+            <div class="tags">
+              <span class="tag">Low GI</span>
+              <span class="tag">High Fibre</span>
+              <span class="tag">Plant Protein</span>
+            </div>
+            <div class="benefits"><strong>Benefits:</strong> Slow-release energy, excellent for blood sugar control.</div>
+          </div>
+        </div>
+        <div class="recipe-card">
+          <div class="recipe-img diabetes">🐟</div>
+          <div class="recipe-body">
+            <h3>Grilled Tilapia with Greens</h3>
+            <div class="recipe-meta">⏱ 25 min · 🔥 280 kcal · GI: Very Low</div>
+            <p>Fresh tilapia seasoned with garlic, lemon and herbs, grilled and served with steamed terere or managu.</p>
+            <div class="tags">
+              <span class="tag">Low Carb</span>
+              <span class="tag">Omega-3</span>
+              <span class="tag">Heart Safe</span>
+            </div>
+            <div class="benefits"><strong>Benefits:</strong> Supports healthy blood sugar and heart function.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HEART HEALTH -->
+    <div class="category-block" data-category="heart">
+      <h2>❤️ Heart-Healthy Recipes</h2>
+      <p class="desc">Recipes low in saturated fat and rich in heart-protective nutrients.</p>
+      <div class="recipes-grid">
+        <div class="recipe-card">
+          <div class="recipe-img heart">🥑</div>
+          <div class="recipe-body">
+            <h3>Avocado & Bean Salad</h3>
+            <div class="recipe-meta">⏱ 15 min · 🔥 320 kcal</div>
+            <p>Ripe avocado mixed with boiled kidney beans, tomatoes, red onion, cucumber and lemon-olive oil dressing.</p>
+            <div class="tags">
+              <span class="tag heart-tag">Heart Healthy</span>
+              <span class="tag">Healthy Fats</span>
+              <span class="tag">Fibre</span>
+            </div>
+            <div class="benefits"><strong>Benefits:</strong> Lowers bad cholesterol, supports healthy blood pressure.</div>
+          </div>
+        </div>
+        <div class="recipe-card">
+          <div class="recipe-img heart">🥣</div>
+          <div class="recipe-body">
+            <h3>Oats Porridge with Groundnuts</h3>
+            <div class="recipe-meta">⏱ 12 min · 🔥 300 kcal</div>
+            <p>Rolled oats cooked in water or low-fat milk, topped with crushed groundnuts and a slice of banana.</p>
+            <div class="tags">
+              <span class="tag heart-tag">Heart Healthy</span>
+              <span class="tag">Soluble Fibre</span>
+              <span class="tag">Breakfast</span>
+            </div>
+            <div class="benefits"><strong>Benefits:</strong> Helps reduce cholesterol and keeps you full longer.</div>
+          </div>
+        </div>
+        <div class="recipe-card">
+          <div class="recipe-img heart">🥬</div>
+          <div class="recipe-body">
+            <h3>Steamed Fish with Spinach</h3>
+            <div class="recipe-meta">⏱ 30 min · 🔥 270 kcal</div>
+            <p>Steamed white fish fillet with garlic, ginger and plenty of spinach or kunde. Light and nourishing.</p>
+            <div class="tags">
+              <span class="tag heart-tag">Low Fat</span>
+              <span class="tag">Omega-3</span>
+              <span class="tag">Potassium</span>
+            </div>
+            <div class="benefits"><strong>Benefits:</strong> Supports healthy blood pressure and heart rhythm.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOOD / IRON BOOSTING -->
+    <div class="category-block" data-category="blood">
+      <h2>🩸 Blood-Boosting & Iron-Rich Recipes</h2>
+      <p class="desc">Foods that help increase haemoglobin and fight anaemia.</p>
+      <div class="recipes-grid">
+        <div class="recipe-card">
+          <div class="recipe-img blood">🍃</div>
+          <div class="recipe-body">
+            <h3>Liver & Spinach Fry</h3>
+            <div class="recipe-meta">⏱ 25 min · 🔥 340 kcal</div>
+            <p>Beef or chicken liver quickly fried with onions, tomatoes and fresh spinach. High in heme iron.</p>
+            <div class="tags">
+              <span class="tag blood-tag">High Iron</span>
+              <span class="tag">Vitamin A</span>
+              <span class="tag">Protein</span>
+            </div>
+            <div class="benefits"><strong>Benefits:</strong> Excellent for raising haemoglobin levels quickly.</div>
+          </div>
+        </div>
+        <div class="recipe-card">
+          <div class="recipe-img blood">🫘</div>
+          <div class="recipe-body">
+            <h3>Bean & Sukuma Mash</h3>
+            <div class="recipe-meta">⏱ 30 min · 🔥 310 kcal</div>
+            <p>Boiled beans mashed with sautéed sukuma wiki, onions and a squeeze of lemon (vitamin C helps iron absorption).</p>
+            <div class="tags">
+              <span class="tag blood-tag">Plant Iron</span>
+              <span class="tag">Fibre</span>
+              <span class="tag">Budget</span>
+            </div>
+            <div class="benefits"><strong>Benefits:</strong> Affordable iron source + vitamin C for better absorption.</div>
+          </div>
+        </div>
+        <div class="recipe-card">
+          <div class="recipe-img blood">🥜</div>
+          <div class="recipe-body">
+            <h3>Millet Porridge with Groundnuts</h3>
+            <div class="recipe-meta">⏱ 20 min · 🔥 330 kcal</div>
+            <p>Traditional millet (wimbi) porridge enriched with groundnut paste and a little milk.</p>
+            <div class="tags">
+              <span class="tag blood-tag">Iron</span>
+              <span class="tag">Energy</span>
+              <span class="tag">Traditional</span>
+            </div>
+            <div class="benefits"><strong>Benefits:</strong> Supports blood building and sustained energy.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEIGHT MANAGEMENT -->
+    <div class="category-block" data-category="weight">
+      <h2>⚖️ Weight Management Recipes</h2>
+      <p class="desc">Balanced, satisfying meals that support healthy weight loss or maintenance.</p>
+      <div class="recipes-grid">
+        <div class="recipe-card">
+          <div class="recipe-img weight">🥗</div>
+          <div class="recipe-body">
+            <h3>Chicken & Vegetable Stir-Fry</h3>
+            <div class="recipe-meta">⏱ 25 min · 🔥 320 kcal</div>
+            <p>Lean chicken strips stir-fried with mixed vegetables (carrots, cabbage, green beans) and minimal oil.</p>
+            <div class="tags">
+              <span class="tag weight-tag">High Protein</span>
+              <span class="tag">Low Calorie</span>
+              <span class="tag">Filling</span>
+            </div>
+            <div class="benefits"><strong>Benefits:</strong> Keeps you full while supporting fat loss.</div>
+          </div>
+        </div>
+        <div class="recipe-card">
+          <div class="recipe-img weight">🍠</div>
+          <div class="recipe-body">
+            <h3>Sweet Potato & Grilled Fish</h3>
+            <div class="recipe-meta">⏱ 30 min · 🔥 350 kcal</div>
+            <p>Baked sweet potato served with grilled fish and a large portion of mixed greens.</p>
+            <div class="tags">
+              <span class="tag weight-tag">Balanced</span>
+              <span class="tag">Complex Carbs</span>
+              <span class="tag">Protein</span>
+            </div>
+            <div class="benefits"><strong>Benefits:</strong> Provides steady energy without blood sugar spikes.</div>
+          </div>
+        </div>
+        <div class="recipe-card">
+          <div class="recipe-img weight">🥒</div>
+          <div class="recipe-body">
+            <h3>Vegetable Egg White Omelette</h3>
+            <div class="recipe-meta">⏱ 15 min · 🔥 220 kcal</div>
+            <p>Egg whites cooked with tomatoes, spinach, onions and green peppers. Light yet protein-rich.</p>
+            <div class="tags">
+              <span class="tag weight-tag">Low Calorie</span>
+              <span class="tag">High Protein</span>
+              <span class="tag">Quick</span>
+            </div>
+            <div class="benefits"><strong>Benefits:</strong> Perfect light meal or breakfast for weight control.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ENERGY & IMMUNITY -->
+    <div class="category-block" data-category="energy">
+      <h2>⚡ Energy & Immunity Boosting Recipes</h2>
+      <p class="desc">Nutrient-dense meals to fight fatigue and strengthen the immune system.</p>
+      <div class="recipes-grid">
+        <div class="recipe-card">
+          <div class="recipe-img energy">🥣</div>
+          <div class="recipe-body">
+            <h3>Fruit & Nut Overnight Oats</h3>
+            <div class="recipe-meta">⏱ 5 min prep · 🔥 340 kcal</div>
+            <p>Oats soaked overnight with milk, topped with banana, mango and a handful of mixed nuts.</p>
+            <div class="tags">
+              <span class="tag">Energy</span>
+              <span class="tag">Vitamins</span>
+              <span class="tag">Breakfast</span>
+            </div>
+            <div class="benefits"><strong>Benefits:</strong> Sustained energy and immune-supporting vitamins.</div>
+          </div>
+        </div>
+        <div class="recipe-card">
+          <div class="recipe-img energy">🥕</div>
+          <div class="recipe-body">
+            <h3>Carrot & Pumpkin Soup</h3>
+            <div class="recipe-meta">⏱ 30 min · 🔥 180 kcal</div>
+            <p>Creamy soup made from carrots, pumpkin, ginger and a touch of coconut milk. Rich in beta-carotene.</p>
+            <div class="tags">
+              <span class="tag">Immunity</span>
+              <span class="tag">Vitamin A</span>
+              <span class="tag">Light</span>
+            </div>
+            <div class="benefits"><strong>Benefits:</strong> Supports eye health and immune function.</div>
+          </div>
+        </div>
+        <div class="recipe-card">
+          <div class="recipe-img energy">🥜</div>
+          <div class="recipe-body">
+            <h3>Groundnut & Banana Smoothie</h3>
+            <div class="recipe-meta">⏱ 5 min · 🔥 290 kcal</div>
+            <p>Blended banana, groundnuts, a spoon of honey and milk or yoghurt. Great post-workout or mid-morning snack.</p>
+            <div class="tags">
+              <span class="tag">Energy</span>
+              <span class="tag">Protein</span>
+              <span class="tag">Quick</span>
+            </div>
+            <div class="benefits"><strong>Benefits:</strong> Quick energy boost with healthy fats and protein.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- CONSULTATION CTA -->
+  <div class="consult-cta">
+    <h2>Need a Personalized Meal Plan?</h2>
+    <p>These recipes are a great start. For a plan tailored to your exact health condition, goals and preferences, book a consultation with Dr. Stephen Karimi.</p>
+    <a href="contact.html">Book a Consultation</a>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-col">
+        <h4>Dr. Stephen Karimi</h4>
+        <p>Certified Nutritionist helping clients achieve lasting health through personalized nutrition.</p>
+      </div>
+     
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <p>📍 Nyeri, Kenya</p>
+        <p>📞 +254 720 027 993</p>
+        <p>✉️ info@drstephengathiga2026@gmail.com</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2026 Dr. Stephen Karimi Nutrition. All rights reserved.
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu
+    document.getElementById('menuToggle').addEventListener('click', () => {
+      document.getElementById('navMenu').classList.toggle('active');
+    });
+
+    // Category filter
+    function filterCategory(cat) {
+      document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      document.querySelectorAll('.category-block').forEach(block => {
+        if (cat === 'all' || block.dataset.category === cat) {
+          block.style.display = 'block';
+        } else {
+          block.style.display = 'none';
+        }
+      });
+    }
+  </script>
+</body>
+</html>
